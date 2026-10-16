@@ -1,0 +1,6 @@
+{
+  "name": "OmniCalc",
+  "description": "Next-generation precision multi-disciplinary calculator suite with scientific math, programmer bitwise, loan & mortgage amortization, 2D function graphing, unit conversion, and statistical analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

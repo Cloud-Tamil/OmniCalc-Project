@@ -1,0 +1,48 @@
+# ==============================================================================
+# OmniCalc Enterprise CI/CD - Node.js v22 (LTS) Optimized Plugins Manifest
+# Configured specifically for Node.js 22.x + TypeScript + React 19 + Docker
+# ==============================================================================
+
+# --- 1. Node.js v22 Runtime & Package Management ---
+nodejs:latest                      # Manages Node.js 22.x installations, npm v10/v11 path, and .npmrc auth
+pipeline-utility-steps:latest      # Native JSON parser (reads package.json scripts, versions, engines >=22)
+docker-workflow:latest             # Native build/push for node:22-alpine production container images
+docker-plugin:latest               # Dynamic Docker container agents running node:22-alpine
+
+# --- 2. Node 22 Test Execution & Code Coverage ---
+junit:latest                       # Ingests Node 22 native test runner reports (node --test --test-reporter=junit)
+coverage:latest                    # Modern V8 / Istanbul code coverage visualizer for Node 22 (--experimental-test-coverage)
+htmlpublisher:latest               # Publishes Vite bundle visualizer and Istanbul HTML coverage reports
+
+# --- 3. TypeScript & Static Code Quality ---
+warnings-ng:latest                 # Next-Gen parser for Node 22, tsc --noEmit, and ESLint output with quality gates
+dependency-check-jenkins-plugin:latest # OWASP CVE security vulnerability scanner for package-lock.json (v3)
+sonar:latest                       # SonarQube scanner for Node.js/TypeScript code smells and technical debt
+
+# --- 4. Node 22 Terminal & Visual Pipeline ---
+ansicolor:latest                   # Renders Node 22 colorful terminal output (Vite, TypeScript, Chalk)
+blueocean:latest                   # Modern visual pipeline UI for stage tracking
+build-name-setter:latest           # Sets dynamic build names from package.json (e.g. "#42 - OmniCalc v0.0.0")
+
+# --- 5. Source Control Management & GitOps ---
+git:latest                         # Git SCM client
+github:latest                      # GitHub integration & webhook trigger
+github-branch-source:latest        # Multi-branch pipeline discovery
+
+# --- 6. Pipeline Flow Control & Concurrency ---
+workflow-aggregator:latest         # Declarative & Scripted pipeline orchestration engine
+pipeline-stage-view:latest         # Stage-by-stage graphical pipeline monitor
+pipeline-graph-analysis:latest     # Pipeline execution flow analysis
+pipeline-milestone-step:latest     # Prevents concurrent build races and out-of-order container deploys
+lockable-resources:latest          # Prevents port 3000 and container name collisions during builds
+
+# --- 7. Security, RBAC & Secret Management ---
+credentials-binding:latest         # Injects masked secrets (NPM_TOKEN, DOCKER_REGISTRY_CREDENTIALS)
+matrix-auth:latest                 # Matrix security authorization
+role-strategy:latest               # Role-based access control for development teams
+
+# --- 8. Workspace & Notifications ---
+timestamper:latest                 # Step-by-step elapsed execution timestamps
+ws-cleanup:latest                  # Efficient node_modules cleanup before and after builds
+slack:latest                       # Slack build notifications with test and audit summaries
+email-ext:latest                   # Rich HTML email notifications with embedded build logs

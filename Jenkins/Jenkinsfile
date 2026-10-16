@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    environment {
+        NODE_ENV = 'production'
+        IMAGE_NAME = 'omnicalc'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
+    options {
+        timeout(time: 15, unit: 'MINUTES')
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Environment Audit') {
+            steps {
+                echo 'Checking Node.js & Docker runtime inside Jenkins container...'
+                sh 'node --version'
+                sh 'npm --version'
+                sh 'docker --version'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing application dependencies...'
+                sh 'npm install --legacy-peer-deps'
+            }
+        }
+
+        stage('Lint & TypeCheck') {
+            steps {
+                echo 'Running TypeScript validation and linting...'
+                sh 'npm run lint'
+            }
+        }
+
+        stage('Build Production Bundle') {
+            steps {
+                echo 'Compiling client bundle with Vite...'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Verify Build Artifacts') {
+            steps {
+                echo 'Verifying generated dist directory...'
+                sh 'test -d dist'
+                sh 'ls -lh dist'
+            }
+        }
+
+        stage('Package Docker Image') {
+            steps {
+                echo "Building Docker container image ${IMAGE_NAME}:${IMAGE_TAG}..."
+                sh """
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .
+                """
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution complete.'
+            cleanWs(deleteDirs: true, notFailBuild: true)
+        }
+        success {
+            echo 'Build, lint, and packaging succeeded.'
+        }
+        failure {
+            echo 'Pipeline failed. Please inspect build logs.'
+        }
+    }
+}
